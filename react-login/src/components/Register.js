@@ -5,7 +5,8 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "./api/axios";
+import { Link } from "react-router-dom";
+import { set } from "mongoose";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PASS_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -71,13 +72,12 @@ const Register = () => {
       })
         .then((res) => {
           if (res.status !== 200) {
-            console.log(res.statusText);
+            res.json().then((data) => setErrMsg(data.message));
           } else {
             setSuccess(true);
           }
         })
         .catch((error) => {
-          console.log(error);
           if (!error?.reponse) {
             setErrMsg("No server response");
           } else if (error.response?.status === 409) {
@@ -85,11 +85,10 @@ const Register = () => {
           } else {
             setErrMsg("Something went wrong");
           }
-
           errRef.current.focus();
         });
     } catch (error) {
-      console.log(error);
+      setErrMsg("Something went wrong");
     }
   }
 
@@ -100,7 +99,9 @@ const Register = () => {
           <h1>Success!</h1>
           <p>
             You have successfully registered. <br />
-            <a href="#">Login</a>
+            <span className="line">
+              <Link to="/login">Login</Link>
+            </span>
           </p>
         </section>
       ) : (
@@ -226,7 +227,7 @@ const Register = () => {
           <p>
             Already Registered? <br />
             <span className="line">
-              <a href="#">Login</a>
+              <Link to="/login">Login</Link>
             </span>
           </p>
         </section>
