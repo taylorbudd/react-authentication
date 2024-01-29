@@ -19,6 +19,9 @@ const userSchema = new mongoose.Schema({
         minlength: [8, "Password must be at least 8 characters long"],
         maxlength: [24, "Password must be less than 24 characters long"],
     },
+    refreshToken:{
+        type: String,
+    },
 });
 
 userSchema.pre('save', function(next){
@@ -37,12 +40,15 @@ userSchema.pre('save', function(next){
     })
 });
 
-//cb = callback function
-userSchema.methods.comparePassword = function(candidatePassword, cb){
-    bcrypt.compare(candidatePassword, this.password, function(err, isMatch){
-        if(err) return cb(err);
-        cb(null, isMatch);
-    })
+userSchema.methods.compareHash = function(hashToCompare, originalValue){
+    const valid = bcrypt.compare(hashToCompare, originalValue);
+
+    if(!valid){
+        throw new Error("Password doesn't match");
+    }else{
+        console.log("It's a match!")
+        return valid
+    }
 }
 
 userSchema.plugin(uniqueValidator, {message: "Username already exists"});
