@@ -1,6 +1,14 @@
 const Mongoose = require('mongoose');
 
-Mongoose.connect("mongodb+srv://taylorbudd:RY9YEDfEW57aFipB@cluster0.vilpgos.mongodb.net/?retryWrites=true&w=majority",{
-    useNewUrlParser: true,
-    dbName: "react-login-db",
-})
+const connectDB = async () => {
+    try {
+        await Mongoose.connect(process.env.DATABASE_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,        
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports = connectDB;
