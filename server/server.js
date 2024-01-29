@@ -1,16 +1,27 @@
-const { MongoClient } = require('mongodb');
 const express = require('express');
-const UserController = require('./controller/userController');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const verifyJWT = require('./middleware/verifyJWT');
+require('dotenv').config();
+const connectDB = require('./db/db');
 
-require('./db/db');
-
-const DB = "react-login-db";
-const COLLECTION = "react-login-collection";
+//Connecting to MongoDB
+connectDB();
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+//routes
+app.use('/refresh', require('./routes/refresh'));
+app.use('/register', require('./routes/register'));
+app.use('/login', require('./routes/auth'));
+app.use('/logout', require('./routes/logout'));
+
+//app.use(verifyJWT);
+
 
 app.use((req,res,next) => {
     console.log("REQUEST: " + JSON.stringify(req.body));
@@ -24,28 +35,8 @@ app.use((req,res,next) => {
     next();
 });
 
-app.post('/register', UserController.registerUser);
 
-// Basic retrival of a single user
-async function run(){
-    try {
-        const db = client.db(DB);
-        const collection = db.collection(COLLECTION);
-
-        const query = { username: 'Taylor' };
-        const user = await collection.findOne(query);
-
-        console.log("USER: " + JSON.stringify(user));
-    } catch (error) {
-        console.log(error);
-    } finally{
-        await client.close();
-    }
-}
-
-
-
-
-
-
-app.listen(4000, () => {console.log("Server is running on port 4000")});
+mongoose.connection.once('open', () => {
+    console.log('MongoDB connection established successfully');
+    app.listen(4000, () => {console.log("Server is running on port 4000")});
+});
