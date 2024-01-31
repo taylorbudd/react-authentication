@@ -1,14 +1,12 @@
 import { useRef, useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Cookies } from "js-cookie";
-import useAuth from '../hooks/useAuth';
-import { set } from "mongoose";
-
+import useAuth from "../hooks/useAuth";
+import axios from "../api/axios";
 
 const LOGIN_URL = "/login";
 
 const Login = () => {
-  const {setAuth} = useAuth();
+  const { setAuth } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,26 +30,31 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      fetch(LOGIN_URL, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user: user, password: pwd }),
-      })
+      axios
+        .post(
+          LOGIN_URL,
+          {
+            user: user,
+            password: pwd,
+          },
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then((res) => {
           if (!res.ok) {
             setErrMsg("Something went wrong");
           }
           return res;
         })
-        .then(res  => res.json())
         .then((res) => {
           console.log(res);
           // set the session/token so that we can see the user is logged in on the server
           const accessToken = res.token;
-          setAuth({user, accessToken});
+          setAuth({ user, accessToken });
           setUser("");
           setPwd("");
           navigate(from, { replace: true });
@@ -118,6 +121,5 @@ const Login = () => {
     </section>
   );
 };
-
 
 export default Login;

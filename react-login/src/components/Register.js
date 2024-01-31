@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import { set } from "mongoose";
+import axios from "../api/axios";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PASS_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -62,23 +62,30 @@ const Register = () => {
     console.log("USER: " + user);
     console.log("PWD: " + pwd);
     try {
-      fetch(REGISTER_URL, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user: user, password: pwd }),
-      })
+      axios
+        .post(
+          REGISTER_URL,
+          {
+            user: user,
+            password: pwd,
+          },
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then((res) => {
+          console.log("RESPONSE: " + res);
           if (res.status !== 200) {
-            res.json().then((data) => setErrMsg(data.message));
+            setErrMsg(res.message)
           } else {
             setSuccess(true);
           }
         })
         .catch((error) => {
-          if (!error?.reponse) {
+          if (!error?.response) {
             setErrMsg("No server response");
           } else if (error.response?.status === 409) {
             setErrMsg("Username already exists");
@@ -90,7 +97,7 @@ const Register = () => {
     } catch (error) {
       setErrMsg("Something went wrong");
     }
-  }
+  };
 
   return (
     <>
