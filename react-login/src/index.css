@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
 
 * {
     margin: 0;
@@ -7,14 +7,14 @@
 }
 
 html {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 22px;
-    color: #fff;
+    color: #F1F2F6;
 }
 
 body {
     min-height: 100vh;
-    background-color: dodgerblue;
+    background-color: #27187E;
 }
 
 .App {
@@ -34,7 +34,8 @@ section {
     flex-direction: column;
     justify-content: flex-start;
     padding: 1rem;
-    background-color: rgba(0,0,0,0.4);
+    background-color: #AEB8FE;
+    color: #27187E;
 }
 
 form {
@@ -45,8 +46,12 @@ form {
     padding-bottom: 1rem;
 }
 
+section a, section a:visited {
+    color: #27187E;
+}
+
 a, a:visited {
-    color: #fff;
+    color: #F1F2F6;
 }
 
 input[type="text"],
