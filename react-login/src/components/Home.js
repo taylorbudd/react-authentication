@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { Navigate, Link } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import useRefreshToken from "../hooks/useRefreshToken";
 
 const Home = () => {
 
     const [user, setUser] = useState("");
 
-    const refresh = useRefreshToken();
     const axios = useAxiosPrivate();
 
     useEffect(() => {
@@ -41,7 +39,6 @@ const Home = () => {
         <h1>Welcome {user}!</h1>
         <br />
         <br />
-        <button type="button" onClick={() => refresh()}>Refresh</button>
         <Link to="/logout">Logout</Link>
       </>
     );
