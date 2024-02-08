@@ -50,6 +50,7 @@ async function loginUser(req, res){
 const logoutUser = async (req, res) => {
     const cookies = req.cookies;
     if(!cookies?.token) return res.status(401);
+    
     const refreshToken = cookies.token;
 
     const user = await User.findOne({ refreshToken }).exec();
@@ -58,8 +59,7 @@ const logoutUser = async (req, res) => {
         return res.sendStatus(204);
     }
 
-    user.refreshToken = "";
-    const result = await user.save();
+    const result = await user.updateOne({ _id: user._id }, { $set: { refreshToken: "" } });
 
     res.clearCookie("token", {httpOnly: true, sameSite: "none", secure: true});
     res.sendStatus(204); 
