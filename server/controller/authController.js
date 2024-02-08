@@ -36,7 +36,7 @@ async function loginUser(req, res){
 
             await User.updateOne({ _id: userInDb._id }, { $set: { refreshToken: refreshToken } });
             
-            res.cookie("token", refreshToken, {httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: "none", secure: true});
+            res.cookie("token", refreshToken, {httpOnly: true, maxAge: 120000, sameSite: "none", secure: true});
             res.status(200).json({
                 message: "User logged in",
                 user: userInDb,
