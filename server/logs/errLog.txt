@@ -1,0 +1,2 @@
+20240206	17:23:51	7fab25ae-6eb1-444c-8c90-b880319a3b16	TypeError: req.getHeaders is not a function
+20240206	17:23:51	f814c99f-64ca-4f31-bcd4-5126b5e3a451	TypeError: req.getHeaders is not a function
