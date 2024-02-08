@@ -39,22 +39,28 @@ async function registerUser(req, res){
     }
 };
 
-async function getUser(){
+async function getUser(req, res){
     try {
-        if(userID !== ""){
-            const user = await User.$where()
-            return user;
-        }else if(username !== ""){
-            return await User.findOne({username: username});
-        } else{
-
+        const cookies = req.cookies;
+        console.log("COOKIES: " + JSON.stringify(cookies));
+        if(!cookies?.token){
+            return res.status(401).send("No token");
+        }
+        const refreshToken = cookies.token;
+        const user = await User.findOne({refreshToken: refreshToken}).exec();
+        console.log("USER: " + JSON.stringify(user));
+        if(!user){
+            return res.status(404).json({message: "User not found"});
+        }else{
+            res.status(200).json({user: user});
         }
     } catch (error) {
-        
+        console.log(error);
     }
 }
 
 module.exports = {
     registerUser,
+    getUser,
     //viewUserProfile,
 }
