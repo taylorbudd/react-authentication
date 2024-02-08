@@ -34,9 +34,9 @@ async function loginUser(req, res){
                 }
             );
 
-            userInDb.refreshToken = refreshToken;
+            await User.updateOne({ _id: userInDb._id }, { $set: { refreshToken: refreshToken } });
             
-            res.cookie("token", refreshToken, {httpOnly: true, maxAge: 24 * 60 * 60 * 1000});
+            res.cookie("token", refreshToken, {httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: "none", secure: true});
             res.status(200).json({
                 message: "User logged in",
                 user: userInDb,
@@ -44,7 +44,7 @@ async function loginUser(req, res){
             });
         }
     }else{
-        throw new Error("Invalid username or password");
+        res.status(401).json({message: "Invalid username or password"});
     }
 
 }
