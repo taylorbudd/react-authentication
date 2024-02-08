@@ -51,10 +51,8 @@ const Login = () => {
           return res;
         })
         .then((res) => {
-          console.log(res);
           // set the session/token so that we can see the user is logged in on the server
           const accessToken = res?.data?.token;
-          console.log("ACCESS TOKEN: " + accessToken);
           setAuth({ user, accessToken });
           setUser("");
           setPwd("");

@@ -12,7 +12,6 @@ const useRefreshToken = () => {
       })
       .then((res) => {
         if (res.status !== 200) {
-          console.log(res.data);
           throw new Error("Network response was not ok");
         }
         setAuth((prev) => {

@@ -37,8 +37,6 @@ const Register = () => {
 
   useEffect(() => {
     const result = USER_REGEX.test(user);
-    console.log(result);
-    console.log(user);
     setValidName(result);
   }, [user]);
 
@@ -59,8 +57,6 @@ const Register = () => {
       setErrMsg("Invalid username or password");
       return;
     }
-    console.log("USER: " + user);
-    console.log("PWD: " + pwd);
     try {
       axios
         .post(
@@ -77,7 +73,6 @@ const Register = () => {
           }
         )
         .then((res) => {
-          console.log("RESPONSE: " + res);
           if (res.status !== 200) {
             setErrMsg(res.message)
           } else {

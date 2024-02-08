@@ -20,7 +20,6 @@ async function registerUser(req, res){
         });
 
         const result = await newUser.save();
-        console.log(result);
 
         if(!result){
             throw new Error("Something went wrong");
@@ -42,13 +41,11 @@ async function registerUser(req, res){
 async function getUser(req, res){
     try {
         const cookies = req.cookies;
-        console.log("COOKIES: " + JSON.stringify(cookies));
         if(!cookies?.token){
             return res.status(401).send("No token");
         }
         const refreshToken = cookies.token;
         const user = await User.findOne({refreshToken: refreshToken}).exec();
-        console.log("USER: " + JSON.stringify(user));
         if(!user){
             return res.status(404).json({message: "User not found"});
         }else{

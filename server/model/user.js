@@ -46,7 +46,6 @@ userSchema.methods.compareHash = function(hashToCompare, originalValue){
     if(!valid){
         throw new Error("Password doesn't match");
     }else{
-        console.log("It's a match!")
         return valid
     }
 }

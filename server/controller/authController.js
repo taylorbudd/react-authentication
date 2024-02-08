@@ -12,8 +12,6 @@ async function loginUser(req, res){
 
     const userInDb = await getUser("", userLoggingIn.username);
 
-    console.log("USER IN DATABASE: " + userInDb)
-
     if(userInDb){
         const isMatch = userInDb.compareHash(userLoggingIn.password, userInDb.password);
         if(!isMatch){
@@ -50,10 +48,7 @@ async function loginUser(req, res){
 }
 
 const logoutUser = async (req, res) => {
-    console.log("IM LOGGING OUT")
-    console.log("REQ: " + req);
     const cookies = req.cookies;
-    console.log("COOKIES: " + JSON.stringify(cookies));
     if(!cookies?.token) return res.status(401);
     const refreshToken = cookies.token;
 
@@ -63,11 +58,8 @@ const logoutUser = async (req, res) => {
         return res.sendStatus(204);
     }
 
-    console.log("USER: " + JSON.stringify(user));
-
     user.refreshToken = "";
     const result = await user.save();
-    console.log("RESULT: " + result);
 
     res.clearCookie("token", {httpOnly: true, sameSite: "none", secure: true});
     res.sendStatus(204); 
