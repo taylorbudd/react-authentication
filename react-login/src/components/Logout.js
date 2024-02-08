@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { RingLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
+import axios from '../api/axios';
 
 
 const Logout = () => {
@@ -10,19 +11,16 @@ const Logout = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch("/logout",{
-            method: "get",
+        axios.get("/logout",{
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
             },
         })
         .then((res) => {
-            if (!res.ok) {
+            if (res.status !== 204) {
               throw new Error("Network response was not ok");
             }
-            console.log("User logged out");
-        
         })
         .catch((err) => {
             console.log(err);
