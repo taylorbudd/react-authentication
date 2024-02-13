@@ -27,6 +27,7 @@ app.use('/refresh', require('./routes/refresh'));
 
 //private routes
 app.use('/', verifyJWT, require('./routes/home'));
+app.use('/profile', verifyJWT, require('./routes/profile'));
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', req.headers.origin);
