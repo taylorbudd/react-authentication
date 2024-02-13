@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Navigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const Home = () => {
-
     const [user, setUser] = useState("");
+
+    const navigate = useNavigate();
 
     const axios = useAxiosPrivate();
 
@@ -29,16 +30,20 @@ const Home = () => {
           console.log(error);
         });
       } catch (error) {
-        console.log(error);
+        if(error.response.status === 403 || error.response.status === 401){
+          navigate('/login');
+        } else{
+          console.log(error);
+        }
       }
     }, [])
     
-
     return (
       <>
         <h1>Welcome {user}!</h1>
         <br />
         <br />
+        <Link to="/profile">Profile</Link>
         <Link to="/logout">Logout</Link>
       </>
     );
